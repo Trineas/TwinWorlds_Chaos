@@ -32,7 +32,7 @@ Material:
     - Vector1_D730A366: 40
     - Vector1_DC4B65A3: 0.2
     m_Colors:
-    - Color_66A41995: {r: 1, g: 0.22798398, b: 0, a: 1}
+    - Color_66A41995: {r: 1, g: 0.5243751, b: 0.0990566, a: 1}
     - Vector2_635AD52: {r: 0.5, g: 0, b: 0, a: 0}
     - Vector2_7903B8AB: {r: 0, g: -0.5, b: 0, a: 0}
     - Vector2_F6911014: {r: 0.5, g: 0, b: 0, a: 0}

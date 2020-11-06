@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f174edb69a48564d806c1e70cd2413e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 150
   body: {fileID: 3227382511199353991}
 --- !u!1 &3227382510743426308
 GameObject:
@@ -301,7 +301,7 @@ MonoBehaviour:
   controller: {fileID: 3227382511199353984}
   speed: 4
   gravity: -19.62
-  jumpHeight: 5
+  jumpHeight: 0
   groundCheck: {fileID: 3227382510743426331}
   groundDistance: 0.4
   groundMask:

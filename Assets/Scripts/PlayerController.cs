@@ -16,12 +16,29 @@ public class PlayerController : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     private bool isGrounded;
+    public Animator anim;
+
+    public enum enumFoot
+    {
+        Left,
+        Right,
+    }
+
+    public GameObject leftFoot = null;
+    public GameObject rightFoot = null;
+    public float footprintSpacer = 1.0f;
+    private Vector3 lastFootPrint;
+    private enumFoot whichFoot;
+    public Transform spawner;
 
     void Start()
     {
         //Hide Cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        //SpawnDecal(leftFoot);
+        //lastFootPrint = transform.position;
     }
 
     void Update()
@@ -42,6 +59,32 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.z;
         controller.Move(move * speed * Time.deltaTime);
 
+        if (moveInput.z != 0)
+        {
+            anim.SetBool("MoveForward", true);
+            anim.SetBool("MoveLeft", false);
+            anim.SetBool("MoveRight", false);
+        }
+        else
+        {
+            anim.SetBool("MoveForward", false);
+            anim.SetBool("MoveLeft", false);
+            anim.SetBool("MoveRight", false);
+        }
+
+        if (moveInput.x < 0)
+        {
+            anim.SetBool("MoveForward", false);
+            anim.SetBool("MoveLeft", true);
+            anim.SetBool("MoveRight", false);
+        }
+        else if (moveInput.x > 0)
+        {
+            anim.SetBool("MoveForward", false);
+            anim.SetBool("MoveLeft", false);
+            anim.SetBool("MoveRight", true);
+        }
+
         // Jump & Gravity
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -50,5 +93,32 @@ public class PlayerController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // Footprints
+        /*if (moveInput.z != 0 || moveInput.x != 0)
+        {
+            float distanceSinceLastFootprint = Vector3.Distance(lastFootPrint, transform.position);
+            if (distanceSinceLastFootprint >= footprintSpacer)
+            {
+                if (whichFoot == enumFoot.Left)
+                {
+                    SpawnDecal(leftFoot);
+                    whichFoot = enumFoot.Right;
+                }
+                else if (whichFoot == enumFoot.Right)
+                {
+                    SpawnDecal(rightFoot);
+                    whichFoot = enumFoot.Left;
+                }
+                lastFootPrint = transform.position;
+            }
+        }*/
+    }
+
+    private void SpawnDecal(GameObject prefab)
+    {
+        GameObject decal = Instantiate(prefab);
+        decal.transform.position = spawner.transform.position;
+        //decal.transform.rotation = transform.rotation;
     }
 }

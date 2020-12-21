@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public CharacterController controller;
+    public static PlayerController instance;
 
+    public CharacterController controller;
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     private bool isGrounded;
     public Animator anim;
+    public Animator camAnim;
+    public bool stopMove;
 
     public enum enumFoot
     {
@@ -31,11 +34,18 @@ public class PlayerController : MonoBehaviour
     private enumFoot whichFoot;
     public Transform spawner;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         //Hide Cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        StartCoroutine(StartRoutine());
 
         //SpawnDecal(leftFoot);
         //lastFootPrint = transform.position;
@@ -56,8 +66,11 @@ public class PlayerController : MonoBehaviour
         moveInput.z = Input.GetAxis("Vertical");
         moveInput.Normalize();
 
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.z;
-        controller.Move(move * speed * Time.deltaTime);
+        if (!stopMove)
+        {
+            Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.z;
+            controller.Move(move * speed * Time.deltaTime);
+        }
 
         if (moveInput.z != 0)
         {
@@ -120,5 +133,19 @@ public class PlayerController : MonoBehaviour
         GameObject decal = Instantiate(prefab);
         decal.transform.position = spawner.transform.position;
         //decal.transform.rotation = transform.rotation;
+    }
+
+    IEnumerator StartRoutine()
+    {
+        stopMove = true;
+        MouseLook.instance.stopLook = true;
+        yield return new WaitForSeconds(2f);
+        UIManager.instance.fadeFromBlack = true;
+        yield return new WaitForSeconds(2f);
+        camAnim.SetTrigger("Start");
+        yield return new WaitForSeconds(3f);
+        stopMove = false;
+        MouseLook.instance.stopLook = false;
+        camAnim.GetComponent<Animator>().enabled = false;
     }
 }

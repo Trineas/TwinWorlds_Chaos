@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
+    public static MouseLook instance;
+
     public float mouseSensitivity = 100f;
     private float xRotation = 0f;
+    public bool stopLook;
 
     public Transform body;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
 
     void Start()
@@ -23,7 +31,10 @@ public class MouseLook : MonoBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        body.Rotate(Vector3.up * mouseX);
+        if (!stopLook)
+        {
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            body.Rotate(Vector3.up * mouseX);
+        }
     }
 }
